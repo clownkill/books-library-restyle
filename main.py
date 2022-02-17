@@ -50,13 +50,12 @@ def download_txt(response, filename, folder='books/'):
 
 def download_image(url, folder='images/'):
     os.makedirs(folder, exist_ok=True)
-    filename = urlsplit(url).path.split('/')[-1]
+    filename = str(urlsplit(url).path.split('/')[-1])
     file_path = os.path.join(folder, filename)
     response = requests.get(url)
     response.raise_for_status()
     with open(file_path, 'wb') as file:
         file.write(response.content)
-
 
 
 def get_book_image(book_id):
@@ -69,6 +68,16 @@ def get_book_image(book_id):
     image_url = urljoin(base_url, url)
     download_image(image_url)
 
+
+def get_book_comments(book_id):
+    url = f'http://tululu.org/b{book_id}/'
+    response = requests.get(url)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.text, 'lxml')
+    comments = soup.find_all('div', class_='texts')
+    if comments:
+        for comment in comments:
+            print(comment.find('span').text)
 
 
 def download_books(max_id):
@@ -85,7 +94,8 @@ def download_books(max_id):
             continue
         # filename = f'{id}. {get_book_title_author(id)}'
         # download_txt(response, filename)
-        get_book_image(id)
+        # get_book_image(id)
+        get_book_comments(id)
 
 
 if __name__ == '__main__':
