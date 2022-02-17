@@ -1,3 +1,5 @@
+import os
+
 import requests
 
 
@@ -17,8 +19,22 @@ def get_book(url, file_name):
         file.write(response.content)
 
 
+def download_books(counts):
+    file_path = 'books/'
+    url = f'http://tululu.org/txt.php'
+    os.makedirs(file_path, exist_ok=True)
+    for id in range(1, counts+1):
+        params = {
+            'id': id
+        }
+        response = requests.get(url, params)
+        response.raise_for_status()
+        file_name = f'{file_path}/{id}.txt'
+        with open(file_name, 'wb') as file:
+            file.write(response.content)
+
+
+
 if __name__ == '__main__':
-    url = 'http://tululu.org/txt.php?id=32168'
-    file_name = 'Пески Марса'
-    get_book(url, file_name)
+    download_books(10)
 
