@@ -1,5 +1,6 @@
 import os
 
+import pathvalidate
 import requests
 from bs4 import BeautifulSoup
 from requests import HTTPError
@@ -33,16 +34,21 @@ def get_book_title_author(book_id):
     title_and_author = soup.find('table', class_='tabs').find('h1').text
     title = title_and_author.split('::')[0].strip()
     author = title_and_author.split('::')[1].strip()
-    print(title)
-    print(author)
+    return title
 
 
 
-def download_books(counts):
-    file_path = 'books/'
+def download_txt(response, filename, folder='books/'):
+    os.makedirs(folder, exist_ok=True)
+    valid_name = pathvalidate.sanitize_filename(filename)
+    file_path = os.path.join(folder, f'{valid_name}.txt')
+    with open(file_path, 'wb') as file:
+        file.write(response.content)
+
+
+def download_books(max_id):
     url = 'http://tululu.org/txt.php'
-    os.makedirs(file_path, exist_ok=True)
-    for id in range(1, counts+1):
+    for id in range(1, max_id+1):
         params = {
             'id': id,
         }
@@ -52,11 +58,8 @@ def download_books(counts):
             check_for_redirect(response)
         except HTTPError:
             continue
-        get_book_title_author(id)
-        # get_book_title_author(response)
-        # file_name = f'{file_path}/{id}.txt'
-        # with open(file_name, 'wb') as file:
-        #     file.write(response.content)
+        filename = get_book_title_author(id)
+        download_txt(response, filename)
 
 
 
