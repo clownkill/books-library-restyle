@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from requests import HTTPError
 
+
 def get_dvmn_logo():
     url = 'https://dvmn.org/filer/canonical/1542890876/16/'
     file_name = 'dvmn.svg'
@@ -37,7 +38,6 @@ def get_book_title_author(book_id):
     return title
 
 
-
 def download_txt(response, filename, folder='books/'):
     os.makedirs(folder, exist_ok=True)
     valid_name = pathvalidate.sanitize_filename(filename)
@@ -58,11 +58,9 @@ def download_books(max_id):
             check_for_redirect(response)
         except HTTPError:
             continue
-        filename = get_book_title_author(id)
+        filename = f'{id}. {get_book_title_author(id)}'
         download_txt(response, filename)
-
 
 
 if __name__ == '__main__':
     download_books(10)
-
