@@ -80,7 +80,7 @@ def get_book_comments(book_id):
             print(comment.find('span').text)
 
 
-def download_books(max_id):
+def parse_books(max_id):
     url = 'http://tululu.org/txt.php'
     for id in range(1, max_id+1):
         params = {
@@ -99,4 +99,4 @@ def download_books(max_id):
 
 
 if __name__ == '__main__':
-    download_books(10)
+    parse_books(10)
