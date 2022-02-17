@@ -1,4 +1,5 @@
 import os
+from urllib.parse import urljoin
 
 import pathvalidate
 import requests
@@ -34,7 +35,7 @@ def get_book_title_author(book_id):
     soup = BeautifulSoup(response.text, 'lxml')
     title_and_author = soup.find('table', class_='tabs').find('h1').text
     title = title_and_author.split('::')[0].strip()
-    author = title_and_author.split('::')[1].strip()
+    # author = title_and_author.split('::')[1].strip()
     return title
 
 
@@ -44,6 +45,18 @@ def download_txt(response, filename, folder='books/'):
     file_path = os.path.join(folder, f'{valid_name}.txt')
     with open(file_path, 'wb') as file:
         file.write(response.content)
+
+
+def get_book_image(book_id):
+    url = f'http://tululu.org/b{book_id}/'
+    response = requests.get(url)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.text, 'lxml')
+    url = soup.find('div', class_='bookimage').find('img')['src']
+    base_url = 'http://tululu.org'
+    image_url = urljoin(base_url, url)
+    print(image_url)
+
 
 
 def download_books(max_id):
@@ -58,8 +71,9 @@ def download_books(max_id):
             check_for_redirect(response)
         except HTTPError:
             continue
-        filename = f'{id}. {get_book_title_author(id)}'
-        download_txt(response, filename)
+        # filename = f'{id}. {get_book_title_author(id)}'
+        # download_txt(response, filename)
+        get_book_image(id)
 
 
 if __name__ == '__main__':
