@@ -1,5 +1,6 @@
 import os
 from urllib.parse import urljoin
+from urllib.parse import urlsplit
 
 import pathvalidate
 import requests
@@ -47,6 +48,17 @@ def download_txt(response, filename, folder='books/'):
         file.write(response.content)
 
 
+def download_image(url, folder='images/'):
+    os.makedirs(folder, exist_ok=True)
+    filename = urlsplit(url).path.split('/')[-1]
+    file_path = os.path.join(folder, filename)
+    response = requests.get(url)
+    response.raise_for_status()
+    with open(file_path, 'wb') as file:
+        file.write(response.content)
+
+
+
 def get_book_image(book_id):
     url = f'http://tululu.org/b{book_id}/'
     response = requests.get(url)
@@ -55,7 +67,7 @@ def get_book_image(book_id):
     url = soup.find('div', class_='bookimage').find('img')['src']
     base_url = 'http://tululu.org'
     image_url = urljoin(base_url, url)
-    print(image_url)
+    download_image(image_url)
 
 
 
