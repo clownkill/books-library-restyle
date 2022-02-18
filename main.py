@@ -79,6 +79,15 @@ def get_book_comments(book_id):
             print(comment.find('span').text)
 
 
+def get_book_genres(book_id):
+    soup = get_book_soup(book_id)
+    genres_tag = soup.find('span', class_='d_book').find_all('a')
+    genres = []
+    for genre in genres_tag:
+        genres.append(genre.text)
+    print(genres)
+
+
 def parse_books(max_id):
     url = 'http://tululu.org/txt.php'
     for id in range(1, max_id+1):
@@ -94,8 +103,8 @@ def parse_books(max_id):
         # filename = f'{id}. {get_book_title_author(id)}'
         # download_txt(response, filename)
         # get_book_image(id)
-        get_book_comments(id)
-
+        # get_book_comments(id)
+        get_book_genres(id)
 
 if __name__ == '__main__':
     parse_books(10)
