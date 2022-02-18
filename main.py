@@ -1,5 +1,5 @@
+import argparse
 import os
-from pprint import pprint
 from urllib.parse import urljoin
 from urllib.parse import urlsplit
 
@@ -107,9 +107,9 @@ def parse_book_page(book_id):
     return book_informations
 
 
-def parse_books(max_id):
+def download_books(start_id, end_id):
     url = 'http://tululu.org/txt.php'
-    for id in range(1, max_id+1):
+    for id in range(start_id, end_id+1):
         params = {
             'id': id,
         }
@@ -119,13 +119,20 @@ def parse_books(max_id):
             check_for_redirect(response)
         except HTTPError:
             continue
-        # filename = f'{id}. {get_book_title_author(id)}'
-        # download_txt(response, filename)
-        # download_image(id)
-        # get_book_comments(id)
-        # get_book_genres(id)
-        pprint(parse_book_page(id))
+        filename = f'{id}. {get_book_title_author(id)[0]}'
+        download_txt(response, filename)
+        download_image(id)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('start_id', help='start book id', default=1)
+    parser.add_argument('end_id', help='end book id', default=10)
+    args = parser.parse_args()
+    start_id = int(args.start_id)
+    end_id = int(args.end_id)
+    download_books(start_id, end_id)
 
 
 if __name__ == '__main__':
-    parse_books(10)
+    main()
