@@ -1,4 +1,5 @@
 import os
+from pprint import pprint
 from urllib.parse import urljoin
 from urllib.parse import urlsplit
 
@@ -41,8 +42,8 @@ def get_book_title_author(book_id):
     soup = get_book_soup(book_id)
     title_and_author = soup.find('table', class_='tabs').find('h1').text
     title = title_and_author.split('::')[0].strip()
-    # author = title_and_author.split('::')[1].strip()
-    return title
+    author = title_and_author.split('::')[1].strip()
+    return title, author
 
 
 def download_txt(response, filename, folder='books/'):
@@ -53,7 +54,8 @@ def download_txt(response, filename, folder='books/'):
         file.write(response.content)
 
 
-def download_image(url, folder='images/'):
+def download_image(book_id, folder='images/'):
+    url = get_book_image_url(book_id)
     os.makedirs(folder, exist_ok=True)
     filename = str(urlsplit(url).path.split('/')[-1])
     file_path = os.path.join(folder, filename)
@@ -63,20 +65,22 @@ def download_image(url, folder='images/'):
         file.write(response.content)
 
 
-def get_book_image(book_id):
+def get_book_image_url(book_id):
     soup = get_book_soup(book_id)
     url = soup.find('div', class_='bookimage').find('img')['src']
     base_url = 'http://tululu.org'
     image_url = urljoin(base_url, url)
-    download_image(image_url)
+    return image_url
 
 
 def get_book_comments(book_id):
     soup = get_book_soup(book_id)
-    comments = soup.find_all('div', class_='texts')
-    if comments:
-        for comment in comments:
-            print(comment.find('span').text)
+    comments_tag = soup.find_all('div', class_='texts')
+    comments = []
+    if comments_tag:
+        for comment in comments_tag:
+            comments.append(comment.find('span').text)
+    return comments
 
 
 def get_book_genres(book_id):
@@ -85,7 +89,22 @@ def get_book_genres(book_id):
     genres = []
     for genre in genres_tag:
         genres.append(genre.text)
-    print(genres)
+    return genres
+
+
+def parse_book_page(book_id):
+    title, author = get_book_title_author(book_id)
+    image_url = get_book_image_url(book_id)
+    genres = get_book_genres(book_id)
+    comments = get_book_comments(book_id)
+    book_informations = {
+        'title': title,
+        'author': author,
+        'image_url': image_url,
+        'genres': genres,
+        'comments': comments,
+    }
+    return book_informations
 
 
 def parse_books(max_id):
@@ -102,9 +121,11 @@ def parse_books(max_id):
             continue
         # filename = f'{id}. {get_book_title_author(id)}'
         # download_txt(response, filename)
-        # get_book_image(id)
+        # download_image(id)
         # get_book_comments(id)
-        get_book_genres(id)
+        # get_book_genres(id)
+        pprint(parse_book_page(id))
+
 
 if __name__ == '__main__':
     parse_books(10)
