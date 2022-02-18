@@ -29,11 +29,16 @@ def check_for_redirect(response):
         raise HTTPError
 
 
-def get_book_title_author(book_id):
+def get_book_soup(book_id):
     url = f'http://tululu.org/b{book_id}/'
     response = requests.get(url)
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'lxml')
+    return soup
+
+
+def get_book_title_author(book_id):
+    soup = get_book_soup(book_id)
     title_and_author = soup.find('table', class_='tabs').find('h1').text
     title = title_and_author.split('::')[0].strip()
     # author = title_and_author.split('::')[1].strip()
@@ -59,10 +64,7 @@ def download_image(url, folder='images/'):
 
 
 def get_book_image(book_id):
-    url = f'http://tululu.org/b{book_id}/'
-    response = requests.get(url)
-    response.raise_for_status()
-    soup = BeautifulSoup(response.text, 'lxml')
+    soup = get_book_soup(book_id)
     url = soup.find('div', class_='bookimage').find('img')['src']
     base_url = 'http://tululu.org'
     image_url = urljoin(base_url, url)
@@ -70,10 +72,7 @@ def get_book_image(book_id):
 
 
 def get_book_comments(book_id):
-    url = f'http://tululu.org/b{book_id}/'
-    response = requests.get(url)
-    response.raise_for_status()
-    soup = BeautifulSoup(response.text, 'lxml')
+    soup = get_book_soup(book_id)
     comments = soup.find_all('div', class_='texts')
     if comments:
         for comment in comments:
