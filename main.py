@@ -5,8 +5,10 @@ from urllib.parse import urlsplit
 
 import pathvalidate
 import requests
-from requests import HTTPError
 from bs4 import BeautifulSoup
+from requests import HTTPError
+from tqdm import tqdm
+
 
 
 def check_for_redirect(response):
@@ -104,7 +106,7 @@ def main():
     args = parser.parse_args()
     start_id = args.start_id
     end_id = args.end_id
-    for book_id in range(start_id, end_id):
+    for book_id in tqdm(range(start_id, end_id)):
         url = f'http://tululu.org/b{book_id}/'
         response = requests.get(url)
         response.raise_for_status()
