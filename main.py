@@ -60,19 +60,14 @@ def get_book_image_url(book_id):
 def get_book_comments(book_id):
     soup = get_book_soup(book_id)
     comments_tag = soup.find_all('div', class_='texts')
-    comments = []
-    if comments_tag:
-        for comment in comments_tag:
-            comments.append(comment.find('span').text)
+    comments = [comment.find('span').text for comment in comments_tag]
     return comments
 
 
 def get_book_genres(book_id):
     soup = get_book_soup(book_id)
     genres_tag = soup.find('span', class_='d_book').find_all('a')
-    genres = []
-    for genre in genres_tag:
-        genres.append(genre.text)
+    genres = [genre.text for genre in genres_tag]
     return genres
 
 
