@@ -32,7 +32,7 @@ def download_txt(response, filename, folder='books/'):
 def download_image(book_id, folder='images/'):
     url = get_book_image_url(book_id)
     os.makedirs(folder, exist_ok=True)
-    filename = str(urlsplit(url).path.split('/')[-1])
+    filename = urlsplit(url).path.split('/')[-1]
     file_path = os.path.join(folder, filename)
     response = requests.get(url)
     response.raise_for_status()
@@ -98,11 +98,11 @@ def download_books(start_id, end_id):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('start_id', help='start book id', default=1)
-    parser.add_argument('end_id', help='end book id', default=10)
+    parser.add_argument('start_id', help='start book id', default=1, type=int)
+    parser.add_argument('end_id', help='end book id', default=10, type=int)
     args = parser.parse_args()
-    start_id = int(args.start_id)
-    end_id = int(args.end_id)
+    start_id = args.start_id
+    end_id = args.end_id
     download_books(start_id, end_id)
     for book_id in range(start_id, end_id):
         url = f'http://tululu.org/b{book_id}/'
