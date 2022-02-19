@@ -30,7 +30,7 @@ def get_book_title_author(book_id):
     return title, author
 
 
-def download_txt(response, filename, folder='books/'):
+def save_book_text(response, filename, folder='books/'):
     os.makedirs(folder, exist_ok=True)
     valid_name = pathvalidate.sanitize_filename(filename)
     file_path = os.path.join(folder, f'{valid_name}.txt')
@@ -94,7 +94,7 @@ def download_books(book_id):
     response = requests.get(url, params)
     response.raise_for_status()
     filename = f'{book_id}. {get_book_title_author(book_id)[0]}'
-    download_txt(response, filename)
+    save_book_text(response, filename)
     download_image(book_id)
 
 
