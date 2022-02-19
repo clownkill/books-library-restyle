@@ -5,15 +5,8 @@ from urllib.parse import urlsplit
 
 import pathvalidate
 import requests
-from bs4 import BeautifulSoup
 from requests import HTTPError
-
-
-def get_book(url, file_name):
-    response = requests.get(url)
-    response.raise_for_status()
-    with open(file_name, 'wb') as file:
-        file.write(response.content)
+from bs4 import BeautifulSoup
 
 
 def check_for_redirect(response):
