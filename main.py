@@ -10,7 +10,6 @@ from requests import HTTPError
 from tqdm import tqdm
 
 
-
 def check_for_redirect(response):
     if response.history:
         raise HTTPError
