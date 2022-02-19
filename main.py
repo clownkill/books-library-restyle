@@ -25,9 +25,8 @@ def get_book_soup(book_id):
 def get_book_title_author(book_id):
     soup = get_book_soup(book_id)
     title_and_author = soup.find('table', class_='tabs').find('h1').text
-    title = title_and_author.split('::')[0].strip()
-    author = title_and_author.split('::')[1].strip()
-    return title, author
+    title, author = title_and_author.split('::')
+    return title.strip(), author.strip()
 
 
 def save_book_text(response, filename, folder='books/'):
