@@ -14,7 +14,16 @@ def check_for_redirect(response):
         raise HTTPError
 
 
-def get_book_title_author(soup):
+def get_book_soup(book_id):
+    url = f'http://tululu.org/b{book_id}/'
+    response = requests.get(url)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.text, 'lxml')
+    return soup
+
+
+def get_book_title_author(book_id):
+    soup = get_book_soup(book_id)
     title_and_author = soup.find('table', class_='tabs').find('h1').text
     title = title_and_author.split('::')[0].strip()
     author = title_and_author.split('::')[1].strip()
@@ -40,14 +49,16 @@ def download_image(book_id, folder='images/'):
         file.write(response.content)
 
 
-def get_book_image_url(soup):
+def get_book_image_url(book_id):
+    soup = get_book_soup(book_id)
     url = soup.find('div', class_='bookimage').find('img')['src']
     base_url = 'http://tululu.org'
     image_url = urljoin(base_url, url)
     return image_url
 
 
-def get_book_comments(soup):
+def get_book_comments(book_id):
+    soup = get_book_soup(book_id)
     comments_tag = soup.find_all('div', class_='texts')
     comments = []
     if comments_tag:
@@ -56,7 +67,8 @@ def get_book_comments(soup):
     return comments
 
 
-def get_book_genres(soup):
+def get_book_genres(book_id):
+    soup = get_book_soup(book_id)
     genres_tag = soup.find('span', class_='d_book').find_all('a')
     genres = []
     for genre in genres_tag:
@@ -64,11 +76,11 @@ def get_book_genres(soup):
     return genres
 
 
-def parse_book_page(page_soup):
-    title, author = get_book_title_author(page_soup)
-    image_url = get_book_image_url(page_soup)
-    genres = get_book_genres(page_soup)
-    comments = get_book_comments(page_soup)
+def parse_book_page(book_id):
+    title, author = get_book_title_author(book_id)
+    image_url = get_book_image_url(book_id)
+    genres = get_book_genres(book_id)
+    comments = get_book_comments(book_id)
     book_informations = {
         'title': title,
         'author': author,
@@ -79,21 +91,16 @@ def parse_book_page(page_soup):
     return book_informations
 
 
-def download_books(start_id, end_id):
+def download_books(book_id):
     url = 'http://tululu.org/txt.php'
-    for id in range(start_id, end_id+1):
-        params = {
-            'id': id,
-        }
-        response = requests.get(url, params)
-        response.raise_for_status()
-        try:
-            check_for_redirect(response)
-        except HTTPError:
-            continue
-        filename = f'{id}. {get_book_title_author(id)[0]}'
-        download_txt(response, filename)
-        download_image(id)
+    params = {
+        'id': book_id,
+    }
+    response = requests.get(url, params)
+    response.raise_for_status()
+    filename = f'{book_id}. {get_book_title_author(book_id)[0]}'
+    download_txt(response, filename)
+    download_image(book_id)
 
 
 def main():
@@ -103,7 +110,6 @@ def main():
     args = parser.parse_args()
     start_id = args.start_id
     end_id = args.end_id
-    download_books(start_id, end_id)
     for book_id in range(start_id, end_id):
         url = f'http://tululu.org/b{book_id}/'
         response = requests.get(url)
@@ -112,8 +118,8 @@ def main():
             check_for_redirect(response)
         except HTTPError:
             continue
-        page_soup = BeautifulSoup(response.text, 'lxml')
-        parse_book_page(page_soup)
+        download_books(book_id)
+        parse_book_page(book_id)
 
 
 if __name__ == '__main__':
