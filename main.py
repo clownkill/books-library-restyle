@@ -34,8 +34,8 @@ def download_txt(response, filename, folder='books/'):
     os.makedirs(folder, exist_ok=True)
     valid_name = pathvalidate.sanitize_filename(filename)
     file_path = os.path.join(folder, f'{valid_name}.txt')
-    with open(file_path, 'wb') as file:
-        file.write(response.content)
+    with open(file_path, 'w') as file:
+        file.write(response.text)
 
 
 def download_image(book_id, folder='images/'):
@@ -100,8 +100,8 @@ def download_books(book_id):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('start_id', help='start book id', default=1, type=int)
-    parser.add_argument('end_id', help='end book id', default=10, type=int)
+    parser.add_argument('-s', '--start_id', type=int, help='start book id', default=1)
+    parser.add_argument('-e', '--end_id', type=int, help='end book id', default=10)
     args = parser.parse_args()
     start_id = args.start_id
     end_id = args.end_id
