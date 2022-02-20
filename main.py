@@ -113,7 +113,10 @@ def main():
             check_for_redirect(response)
         except HTTPError:
             continue
-        download_book(book_id)
+        try:
+            download_book(book_id)
+        except HTTPError:
+            continue
         parse_book_page(book_id)
 
 
