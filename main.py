@@ -86,7 +86,7 @@ def parse_book_page(book_id):
     return book_informations
 
 
-def download_books(book_id):
+def download_book(book_id):
     url = 'http://tululu.org/txt.php'
     params = {
         'id': book_id,
@@ -113,7 +113,7 @@ def main():
             check_for_redirect(response)
         except HTTPError:
             continue
-        download_books(book_id)
+        download_book(book_id)
         parse_book_page(book_id)
 
 
