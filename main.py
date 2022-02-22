@@ -84,10 +84,12 @@ def download_book(book_id, book_url):
     }
     response = requests.get(url, params)
     response.raise_for_status()
-    book_title = parse_book_page(book_url)['title']
+    check_for_redirect(response)
+    book_parsed_inforamtions = parse_book_page(book_url)
+    book_title = book_parsed_inforamtions['title']
+    book_image_url = book_parsed_inforamtions['image_url']
     filename = f'{book_id}. {book_title}'
     save_book_text(response, filename)
-    book_image_url = parse_book_page(book_url)['image_url']
     download_image(book_image_url)
 
 
@@ -100,12 +102,6 @@ def main():
     end_id = args.end_id
     for book_id in tqdm(range(start_id, end_id)):
         url = f'http://tululu.org/b{book_id}/'
-        response = requests.get(url)
-        response.raise_for_status()
-        try:
-            check_for_redirect(response)
-        except HTTPError:
-            continue
         try:
             download_book(book_id, url)
         except HTTPError:
