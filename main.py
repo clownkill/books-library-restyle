@@ -87,10 +87,8 @@ def download_book(book_id, book_url):
     check_for_redirect(response)
     book_parsed_inforamtions = parse_book_page(book_url)
     book_title = book_parsed_inforamtions['title']
-    book_image_url = book_parsed_inforamtions['image_url']
     filename = f'{book_id}. {book_title}'
     save_book_text(response, filename)
-    download_image(book_image_url)
 
 
 def main():
