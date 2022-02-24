@@ -17,10 +17,9 @@ def download_book_from_all_pages():
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'lxml')
         base_url = 'http://tululu.org'
-        book_cards = soup.find_all('table', class_='d_book')
-
-        for book_card in book_cards:
-            book_link = book_card.find('a')['href']
+        book_links = soup.select('.d_book')
+        for book_a_tag in book_links:
+            book_link = book_a_tag.select_one('a')['href']
             book_url = urljoin(base_url, book_link)
             book_id = book_link.strip('/').lstrip('b')
             try:
