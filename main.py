@@ -44,7 +44,7 @@ def save_book_text(response, filename, folder='books/'):
     os.makedirs(folder, exist_ok=True)
     valid_name = pathvalidate.sanitize_filename(filename)
     file_path = os.path.join(folder, f'{valid_name}.txt')
-    with open(file_path, 'w') as file:
+    with open(file_path, 'w', encoding='utf-8') as file:
         file.write(response.text)
 
 
