@@ -13,10 +13,11 @@ def create_argparser():
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--start_page', default=1, type=int)
     parser.add_argument('-e', '--end_page', type=int)
+    parser.add_argument('-df', '--dest_folder')
     return parser
 
 
-def download_book_from_all_pages(start_page, end_page):
+def download_book_from_all_pages(start_page, end_page, dest_folder):
     book_informations = {}
 
     for page in range(start_page, end_page):
@@ -31,7 +32,7 @@ def download_book_from_all_pages(start_page, end_page):
             book_url = urljoin(base_url, book_link)
             book_id = book_link.strip('/').lstrip('b')
             try:
-                download_book(book_id, book_url)
+                download_book(book_id, book_url, dest_folder)
                 print(book_url)
                 parsed_book_informations = parse_book_page(book_url)
                 book_informations[book_id] = parsed_book_informations
@@ -47,11 +48,13 @@ def main():
     parser = create_argparser()
     namespace = parser.parse_args()
     start_page = namespace.start_page
+    dest_folder = namespace.dest_folder
     if not namespace.end_page:
         end_page = start_page + 1
     else:
         end_page = namespace.end_page
-    download_book_from_all_pages(start_page, end_page)
+    if dest_folder:
+        download_book_from_all_pages(start_page, end_page, dest_folder)
 
 
 

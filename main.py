@@ -77,7 +77,7 @@ def parse_book_page(book_url):
     return book_informations
 
 
-def download_book(book_id, book_url):
+def download_book(book_id, book_url, dest_folder='./books/'):
     url = 'http://tululu.org/txt.php'
     params = {
         'id': book_id,
@@ -88,7 +88,7 @@ def download_book(book_id, book_url):
     book_parsed_inforamtions = parse_book_page(book_url)
     book_title = book_parsed_inforamtions['title']
     filename = f'{book_id}. {book_title}'
-    save_book_text(response, filename)
+    save_book_text(response, filename, dest_folder)
 
 
 def main():
