@@ -1,5 +1,6 @@
 import argparse
 import json
+import os
 from urllib.parse import urljoin
 
 import requests
@@ -17,7 +18,15 @@ def create_argparser():
     return parser
 
 
-def download_book_from_all_pages(start_page, end_page, dest_folder):
+def save_books_json(book_informations, dest_folder='./', folder='json/'):
+    os.makedirs(folder, exist_ok=True)
+    file_name = 'books.json'
+    file_path = os.path.join(dest_folder, folder, f'{file_name}')
+    with open(file_path, 'w', encoding='utf-8') as json_file:
+        json.dump(book_informations, json_file, ensure_ascii=False)
+
+
+def download_book_from_all_pages(start_page, end_page, dest_folder='./'):
     book_informations = {}
 
     for page in range(start_page, end_page):
@@ -36,12 +45,11 @@ def download_book_from_all_pages(start_page, end_page, dest_folder):
                 print(book_url)
                 parsed_book_informations = parse_book_page(book_url)
                 book_informations[book_id] = parsed_book_informations
-                download_image(parsed_book_informations['image_url'])
+                download_image(parsed_book_informations['image_url'], dest_folder)
             except HTTPError:
                 continue
 
-    with open('books.json', 'w', encoding='utf-8') as json_file:
-        json.dump(book_informations, json_file, ensure_ascii=False)
+    save_books_json(book_informations)
 
 
 def main():
@@ -55,6 +63,7 @@ def main():
         end_page = namespace.end_page
     if dest_folder:
         download_book_from_all_pages(start_page, end_page, dest_folder)
+    download_book_from_all_pages(start_page, end_page)
 
 
 

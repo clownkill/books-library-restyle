@@ -40,19 +40,19 @@ def get_book_genres(soup):
     return genres
 
 
-def save_book_text(response, filename, folder='books/'):
+def save_book_text(response, filename, dest_folder='./', folder='books/'):
     os.makedirs(folder, exist_ok=True)
     valid_name = pathvalidate.sanitize_filename(filename)
-    file_path = os.path.join(folder, f'{valid_name}.txt')
+    file_path = os.path.join(dest_folder, folder, f'{valid_name}.txt')
     with open(file_path, 'w', encoding='utf-8') as file:
         file.write(response.text)
 
 
-def download_image(book_image_url, folder='images/'):
+def download_image(book_image_url, dest_folder='./', folder='images/'):
     url = book_image_url
     os.makedirs(folder, exist_ok=True)
     filename = urlsplit(url).path.split('/')[-1]
-    file_path = os.path.join(folder, filename)
+    file_path = os.path.join(dest_folder, folder, filename)
     response = requests.get(url)
     response.raise_for_status()
     with open(file_path, 'wb') as file:
