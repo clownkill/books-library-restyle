@@ -51,7 +51,6 @@ def download_book_from_all_pages(soup, dest_folder, json_path, skip_image, skip_
         try:
             if not skip_text:
                 download_book(book_id, book_url, dest_folder)
-            print(book_url)
             parsed_book_informations = parse_book_page(book_url)
             book_informations[book_id] = parsed_book_informations
             if not skip_image:
