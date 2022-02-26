@@ -62,7 +62,7 @@ python parse_tululu_book_page.py --start_id 11 --end_id 20
 ```
 python parse_tululu_category.py
 ```
-Скачаются книги с первой страницы.
+Скачаются книги со всех страниц.
 
 Все аргументы коммандной строки являются необязательными:
 ```
