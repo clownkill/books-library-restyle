@@ -11,7 +11,7 @@ pip install -r requirements.txt
 ```
 # Описание модулей
 
-## main.py
+## parse_tululu_book_page.py
 
 Позволяет скачивать книги и собирать информацию о них с помощью id книги из
 онлайн-библиотеки [tululu.org](https://tululu.org/).
@@ -26,17 +26,17 @@ pip install -r requirements.txt
 
 Для запуска с аргументами по умолчанию необходимо выполнить:
 ```
-python main.py
+python parse_tululu_book_page.py
 ```
 В результате скачаются книги у которых id от 1 до 10
 
 Для запуска с указанием id книг, которые необходимо скачать нужно выполнить:
 ```
-python main.py -s 11 -e 20
+python parse_tululu_book_page.py -s 11 -e 20
 ```
 или
 ```
-python main.py --start_id 11 --end_id 20
+python parse_tululu_book_page.py --start_id 11 --end_id 20
 ```
 В результате скачаются книги с id от 11 до 20.
 

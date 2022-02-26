@@ -7,7 +7,7 @@ import requests
 from bs4 import BeautifulSoup
 from requests import HTTPError
 
-from main import download_book, download_image, parse_book_page
+from parse_tululu_book_page import download_book, download_image, parse_book_page
 
 
 def create_argparser():
