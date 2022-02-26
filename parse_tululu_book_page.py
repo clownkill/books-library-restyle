@@ -92,6 +92,8 @@ def download_book(book_id, book_url, dest_folder='./'):
     filename = f'{book_id}. {book_title}'
     save_book_text(response, filename, dest_folder)
 
+    return book_parsed_inforamtions
+
 
 def main():
     parser = argparse.ArgumentParser()

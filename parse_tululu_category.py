@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 from requests import HTTPError
 
-from parse_tululu_book_page import download_book, download_image, parse_book_page
+from parse_tululu_book_page import download_book, download_image
 
 
 def create_argparser():
@@ -53,11 +53,10 @@ def get_book_from_pages(
             book_id = book_link.strip('/').lstrip('b')
             try:
                 if not skip_text:
-                    download_book(book_id, book_url, dest_folder)
-                parsed_book_informations = parse_book_page(book_url)
-                book_informations[book_id] = parsed_book_informations
-                if not skip_image:
-                    download_image(parsed_book_informations['image_url'], dest_folder)
+                    parsed_book_informations = download_book(book_id, book_url, dest_folder)
+                    book_informations[book_id] = parsed_book_informations
+                    if not skip_image:
+                        download_image(parsed_book_informations['image_url'], dest_folder)
             except HTTPError:
                 continue
 
