@@ -27,7 +27,7 @@ def save_books_json(book_informations, dest_folder='./', folder='json/'):
     folder_path = os.path.join(dest_folder, folder)
     os.makedirs(folder_path, exist_ok=True)
     file_name = 'books.json'
-    file_path = os.path.join(folder_path, f'{file_name}')
+    file_path = os.path.join(folder_path, file_name)
     with open(file_path, 'w', encoding='utf-8') as json_file:
         json.dump(book_informations, json_file, ensure_ascii=False)
 
