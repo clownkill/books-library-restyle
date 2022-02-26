@@ -44,6 +44,7 @@ def download_book_from_all_pages(soup, dest_folder, json_path, skip_image, skip_
     book_informations = {}
     base_url = 'http://tululu.org'
     book_links = soup.select('.d_book')
+
     for book_a_tag in book_links:
         book_link = book_a_tag.select_one('a')['href']
         book_url = urljoin(base_url, book_link)
@@ -57,6 +58,7 @@ def download_book_from_all_pages(soup, dest_folder, json_path, skip_image, skip_
                 download_image(parsed_book_informations['image_url'], dest_folder)
         except HTTPError:
             continue
+
     save_books_json(book_informations, dest_folder, json_path)
 
 
