@@ -16,6 +16,8 @@ def create_argparser():
     parser.add_argument('-e', '--end_page', type=int)
     parser.add_argument('-df', '--dest_folder', default='./', type=str)
     parser.add_argument('-jp', '--json_path', default='json/', type=str)
+    parser.add_argument('-si', '--skip_image', action='store_true', default=False)
+    parser.add_argument('-st', '--skip_text', action='store_true', default=False)
 
     return parser
 
@@ -29,16 +31,16 @@ def save_books_json(book_informations, dest_folder='./', folder='json/'):
         json.dump(book_informations, json_file, ensure_ascii=False)
 
 
-def get_book(start_page, end_page, dest_folder='./', json_path='json/'):
+def get_book(start_page, end_page, dest_folder='./', json_path='json/', skip_image=False, skip_text=False):
     for page in range(start_page, end_page):
         url = f'http://tululu.org/l55/{page}'
         response = requests.get(url)
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'lxml')
-        download_book_from_all_pages(soup, dest_folder, json_path)
+        download_book_from_all_pages(soup, dest_folder, json_path, skip_image, skip_text)
 
 
-def download_book_from_all_pages(soup, dest_folder, json_path):
+def download_book_from_all_pages(soup, dest_folder, json_path, skip_image, skip_text):
     book_informations = {}
     base_url = 'http://tululu.org'
     book_links = soup.select('.d_book')
@@ -47,11 +49,13 @@ def download_book_from_all_pages(soup, dest_folder, json_path):
         book_url = urljoin(base_url, book_link)
         book_id = book_link.strip('/').lstrip('b')
         try:
-            download_book(book_id, book_url, dest_folder)
+            if not skip_text:
+                download_book(book_id, book_url, dest_folder)
             print(book_url)
             parsed_book_informations = parse_book_page(book_url)
             book_informations[book_id] = parsed_book_informations
-            download_image(parsed_book_informations['image_url'], dest_folder)
+            if not skip_image:
+                download_image(parsed_book_informations['image_url'], dest_folder)
         except HTTPError:
             continue
     save_books_json(book_informations, dest_folder, json_path)
@@ -63,18 +67,15 @@ def main():
     start_page = namespace.start_page
     dest_folder = namespace.dest_folder
     json_path = namespace.json_path
+    skip_image = namespace.skip_image
+    skip_text = namespace.skip_text
 
     if not namespace.end_page:
         end_page = start_page + 1
     else:
         end_page = namespace.end_page
 
-    get_book(start_page, end_page, dest_folder, json_path)
-    # if dest_folder:
-    #         get_book(start_page, end_page, dest_folder)
-    # else:
-    #     get_book(start_page, end_page)
-
+    get_book(start_page, end_page, dest_folder, json_path, skip_image, skip_text)
 
 
 if __name__ == '__main__':
