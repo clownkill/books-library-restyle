@@ -14,7 +14,8 @@ def create_argparser():
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--start_page', default=1, type=int)
     parser.add_argument('-e', '--end_page', type=int)
-    parser.add_argument('-df', '--dest_folder', type=str)
+    parser.add_argument('-df', '--dest_folder', default='./', type=str)
+    parser.add_argument('-jp', '--json_path', default='json/', type=str)
 
     return parser
 
@@ -28,16 +29,16 @@ def save_books_json(book_informations, dest_folder='./', folder='json/'):
         json.dump(book_informations, json_file, ensure_ascii=False)
 
 
-def get_book(start_page, end_page, dest_folder='./'):
+def get_book(start_page, end_page, dest_folder='./', json_path='json/'):
     for page in range(start_page, end_page):
         url = f'http://tululu.org/l55/{page}'
         response = requests.get(url)
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'lxml')
-        download_book_from_all_pages(soup, dest_folder)
+        download_book_from_all_pages(soup, dest_folder, json_path)
 
 
-def download_book_from_all_pages(soup, dest_folder):
+def download_book_from_all_pages(soup, dest_folder, json_path):
     book_informations = {}
     base_url = 'http://tululu.org'
     book_links = soup.select('.d_book')
@@ -53,7 +54,7 @@ def download_book_from_all_pages(soup, dest_folder):
             download_image(parsed_book_informations['image_url'], dest_folder)
         except HTTPError:
             continue
-    save_books_json(book_informations, dest_folder)
+    save_books_json(book_informations, dest_folder, json_path)
 
 
 def main():
@@ -61,15 +62,18 @@ def main():
     namespace = parser.parse_args()
     start_page = namespace.start_page
     dest_folder = namespace.dest_folder
+    json_path = namespace.json_path
 
     if not namespace.end_page:
         end_page = start_page + 1
     else:
         end_page = namespace.end_page
 
-    if dest_folder:
-        get_book(start_page, end_page, dest_folder)
-    get_book(start_page, end_page)
+    get_book(start_page, end_page, dest_folder, json_path)
+    # if dest_folder:
+    #         get_book(start_page, end_page, dest_folder)
+    # else:
+    #     get_book(start_page, end_page)
 
 
 
