@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 from requests import HTTPError
 
-from parse_tululu_book_page import download_book, download_image
+from parse_tululu_book_page import save_book_text, download_image, parse_book_page, check_for_redirect
 
 
 def create_argparser():
@@ -36,6 +36,7 @@ def get_book_from_pages(
         start_page, end_page,
         dest_folder='./', json_path='./json',
         skip_image=False, skip_text=False):
+
     book_informations = {}
 
     for page in range(start_page, end_page):
@@ -53,8 +54,20 @@ def get_book_from_pages(
             book_id = book_link.strip('/').lstrip('b')
             try:
                 if not skip_text:
-                    parsed_book_informations = download_book(book_id, book_url, dest_folder)
+                    book_response = requests.get(book_url)
+                    book_response.raise_for_status()
+                    check_for_redirect(book_response)
+                    parsed_book_informations = parse_book_page(book_response)
                     book_informations[book_id] = parsed_book_informations
+                    text_url = 'http://tululu.org/txt.php'
+                    params = {
+                        'id': book_id,
+                    }
+                    save_response = requests.get(text_url, params=params)
+                    save_response.raise_for_status()
+                    book_title = parsed_book_informations['title']
+                    filename = f'{book_id}. {book_title}'
+                    save_book_text(save_response,filename, dest_folder)
                     if not skip_image:
                         download_image(parsed_book_informations['image_url'], dest_folder)
             except HTTPError:
