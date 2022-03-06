@@ -61,8 +61,7 @@ def download_image(book_image_url, dest_folder, folder='images/'):
         file.write(response.content)
 
 
-def parse_book_page(book_url):
-    response = requests.get(book_url)
+def parse_book_page(response):
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'lxml')
     title, author = get_book_title_author(soup)
@@ -79,20 +78,18 @@ def parse_book_page(book_url):
     return book_informations
 
 
-def download_book(book_id, book_url, dest_folder='./'):
+def download_book(book_id, parsed_book_informations, dest_folder='./'):
     url = 'http://tululu.org/txt.php'
     params = {
         'id': book_id,
     }
     response = requests.get(url, params)
     response.raise_for_status()
-    check_for_redirect(response)
-    book_parsed_inforamtions = parse_book_page(book_url)
-    book_title = book_parsed_inforamtions['title']
+    book_title = parsed_book_informations['title']
+    book_image_url = parsed_book_informations['image_url']
     filename = f'{book_id}. {book_title}'
     save_book_text(response, filename, dest_folder)
-
-    return book_parsed_inforamtions
+    download_image(book_image_url, dest_folder)
 
 
 def main():
@@ -105,7 +102,10 @@ def main():
     for book_id in tqdm(range(start_id, end_id)):
         url = f'http://tululu.org/b{book_id}/'
         try:
-            download_book(book_id, url)
+            response = requests.get(url)
+            check_for_redirect(response)
+            parsed_book_informations = parse_book_page(response)
+            download_book(book_id, parsed_book_informations)
         except HTTPError:
             continue
 
