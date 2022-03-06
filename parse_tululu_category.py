@@ -14,7 +14,7 @@ from parse_tululu_book_page import save_book_text, download_image, parse_book_pa
 def create_argparser():
     parser = argparse.ArgumentParser()
     parser.add_argument('-s', '--start_page', default=1, type=int)
-    parser.add_argument('-e', '--end_page', type=int)
+    parser.add_argument('-e', '--end_page', default=get_last_page(), type=int)
     parser.add_argument('-df', '--dest_folder', default='./', type=str)
     parser.add_argument('-jp', '--json_path', default='json/', type=str)
     parser.add_argument('-si', '--skip_image', action='store_true', default=False)
@@ -89,18 +89,15 @@ def get_last_page():
 def main():
     parser = create_argparser()
     namespace = parser.parse_args()
-    start_page = namespace.start_page
-    dest_folder = namespace.dest_folder
-    json_path = namespace.json_path
-    skip_image = namespace.skip_image
-    skip_text = namespace.skip_text
 
-    if not namespace.end_page:
-        end_page = get_last_page()
-    else:
-        end_page = namespace.end_page
-
-    get_book_from_pages(start_page, end_page, dest_folder, json_path, skip_image, skip_text)
+    get_book_from_pages(
+        namespace.start_page,
+        namespace.end_page,
+        namespace.dest_folder,
+        namespace.json_path,
+        namespace.skip_image,
+        namespace.skip_text
+    )
 
 
 if __name__ == '__main__':
