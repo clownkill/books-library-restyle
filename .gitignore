@@ -121,3 +121,5 @@ json/
 .gitattributes
 *.txt
 *.json
+
+index.html
