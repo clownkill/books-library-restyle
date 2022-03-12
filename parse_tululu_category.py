@@ -57,7 +57,7 @@ def get_book_from_pages(
                     book_response = requests.get(book_url)
                     book_response.raise_for_status()
                     check_for_redirect(book_response)
-                    parsed_book_informations = parse_book_page(book_response)
+                    parsed_book_informations = parse_book_page(book_response, book_id)
                     book_informations[book_id] = parsed_book_informations
                     text_url = 'http://tululu.org/txt.php'
                     params = {
@@ -67,7 +67,7 @@ def get_book_from_pages(
                     save_response.raise_for_status()
                     book_title = parsed_book_informations['title']
                     filename = f'{book_id}. {book_title}'
-                    save_book_text(save_response,filename, dest_folder)
+                    save_book_text(save_response, filename, dest_folder)
                     if not skip_image:
                         download_image(parsed_book_informations['image_url'], dest_folder)
             except HTTPError:

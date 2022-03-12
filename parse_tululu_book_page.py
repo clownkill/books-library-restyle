@@ -61,7 +61,7 @@ def download_image(book_image_url, dest_folder, folder='images/'):
         file.write(response.content)
 
 
-def parse_book_page(response):
+def parse_book_page(response, book_id):
     response.raise_for_status()
     soup = BeautifulSoup(response.text, 'lxml')
     title, author = get_book_title_author(soup)
@@ -69,6 +69,7 @@ def parse_book_page(response):
     genres = get_book_genres(soup)
     comments = get_book_comments(soup)
     book_informations = {
+        'book_file_name': f'{book_id}. {title}.txt',
         'title': title,
         'author': author,
         'image_url': image_url,
@@ -104,7 +105,7 @@ def main():
         try:
             response = requests.get(url)
             check_for_redirect(response)
-            parsed_book_informations = parse_book_page(response)
+            parsed_book_informations = parse_book_page(response, book_id)
             download_book(book_id, parsed_book_informations)
         except HTTPError:
             continue
