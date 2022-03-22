@@ -14,13 +14,13 @@
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center">
         <li class="page-item disabled">
-          <a class="page-link" href="index{{ page_num - 1}}.html" tabindex="-1" aria-disabled="true">Previous</a>
+          <a class="page-link" href="pages/index{{ page_num - 1}}.html" tabindex="-1" aria-disabled="true">Previous</a>
         </li>
         {% for page_num in range(1, page_count+1)  %}
-        <li class="page-item"><a class="page-link" href="index{{ page_num }}.html">{{ page_num }}</a></li>
+        <li class="page-item"><a class="page-link" href="pages/index{{ page_num }}.html">{{ page_num }}</a></li>
         {% endfor %}
         <li class="page-item">
-          <a class="page-link" href="index{{ page_num + 1 }}.html">Next</a>
+          <a class="page-link" href="pages/index{{ page_num + 1 }}.html">Next</a>
         </li>
       </ul>
     </nav>
@@ -38,7 +38,7 @@
                     <h5 class="card-title">{{ book_pair[0].title }}</h5>
                     <p class="card-text">{{ book_pair[0].author }}</p>
                     <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                    <a href="./books/{{ book_pair[0].book_file_name }}" target="_blank">Читать</a>
+                    <a href="books/{{ book_pair[0].book_file_name }}" target="_blank">Читать</a>
                   </div>
                 </div>
               </div>
