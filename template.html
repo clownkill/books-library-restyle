@@ -11,6 +11,19 @@
     <title>Library</title>
   </head>
   <body>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+          <a class="page-link" href="index{{ page_num - 1}}.html" tabindex="-1" aria-disabled="true">Previous</a>
+        </li>
+        {% for page_num in range(1, page_count+1)  %}
+        <li class="page-item"><a class="page-link" href="index{{ page_num }}.html">{{ page_num }}</a></li>
+        {% endfor %}
+        <li class="page-item">
+          <a class="page-link" href="index{{ page_num + 1 }}.html">Next</a>
+        </li>
+      </ul>
+    </nav>
     {% for book_pair in book_pairs %}
       <div class="container">
         <div class="row">

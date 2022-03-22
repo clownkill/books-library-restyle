@@ -22,13 +22,14 @@ def on_reload():
     os.makedirs(folder_path, exist_ok=True)
 
     books_splite_by_20 = list(chunked(books, 10))
+    page_count = len(books_splite_by_20)
     for page_num, splitted_books in enumerate(books_splite_by_20, 1):
         book_pairs = list(chunked(splitted_books, 2))
 
         file_name = f'index{page_num}.html'
         file_path = os.path.join(folder_path, file_name)
 
-        rendered_page = template.render(book_pairs=book_pairs)
+        rendered_page = template.render(book_pairs=book_pairs, page_count=page_count, page_num=page_num)
 
         with open(file_path, 'w', encoding="utf8") as file:
             file.write(rendered_page)
