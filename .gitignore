@@ -117,6 +117,7 @@ dmypy.json
 books/
 images/
 json/
+pages/
 
 .gitattributes
 *.txt
