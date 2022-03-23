@@ -116,7 +116,5 @@ dmypy.json
 .idea/
 
 .gitattributes
-*.txt
-*.json
 
 index.html

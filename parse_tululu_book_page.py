@@ -71,7 +71,7 @@ def parse_book_page(response, book_id):
     genres = get_book_genres(soup)
     comments = get_book_comments(soup)
     book_informations = {
-        'book_file_name': f'{book_id}. {title}.txt',
+        'book_file_name': f'{book_id}.{title}.txt',
         'title': title,
         'author': author,
         'image_url': image_url,

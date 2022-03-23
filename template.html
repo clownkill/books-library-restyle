@@ -61,17 +61,17 @@
             <div class="card mb-3" style="max-width: 540px;">
               <div class="row no-gutters">
                 <div class="col-md-4">
-                  <img src="../media/images/{{ book_pair[1].image_name }}" class="card-img" alt="{{ book_pair[1].title }}">
+                  <img src="../media/images/{{ book_pair[-1].image_name }}" class="card-img" alt="{{ book_pair[-1].title }}">
                 </div>
                 <div class="col-md-8">
                   <div class="card-body">
-                    <h5 class="card-title">{{ book_pair[1].title }}</h5>
-                    <p class="card-text">{{ book_pair[1].author }}</p>
-                    {% for genre in book_pair[1].genres %}
+                    <h5 class="card-title">{{ book_pair[-1].title }}</h5>
+                    <p class="card-text">{{ book_pair[-1].author }}</p>
+                    {% for genre in book_pair[-1].genres %}
                       <span class="badge badge-light">{{ genre }}</span>
                     {% endfor %}
                     <p>
-                      <a href="../media/books/{{ book_pair[1].book_file_name }}" target="_blank">Читать</a>
+                      <a href="../media/books/{{ book_pair[-1].book_file_name }}" target="_blank">Читать</a>
                     </p>
                   </div>
                 </div>
