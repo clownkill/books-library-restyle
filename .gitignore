@@ -114,11 +114,6 @@ dmypy.json
 .pyre/
 
 .idea/
-books/
-images/
-json/
-pages/
-media/
 
 .gitattributes
 *.txt
