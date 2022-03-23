@@ -13,15 +13,23 @@
   <body>
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center">
-        <li class="page-item disabled">
-          <a class="page-link" href="pages/index{{ page_num - 1}}.html" tabindex="-1" aria-disabled="true">Previous</a>
-        </li>
-        {% for page_num in range(1, page_count+1)  %}
-        <li class="page-item"><a class="page-link" href="pages/index{{ page_num }}.html">{{ page_num }}</a></li>
+        {% if page_num == 1 %}
+          <li class="page-item disabled"><a class="page-link" href="#">Предыдущая</a></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="index{{ page_num - 1 }}.html">Предыдущая</a></li>
+        {% endif %}
+        {% for page in range(1, page_count + 1) %}
+          {% if page == page_num %}
+            <li class="page-item active" aria-current="page"><a class="page-link" href="index{{ page }}.html">{{page}}</a></li>
+          {% else %}
+            <li class="page-item" ><a class="page-link" href="index{{ page }}.html">{{page}}</a></li>
+          {% endif %}
         {% endfor %}
-        <li class="page-item">
-          <a class="page-link" href="pages/index{{ page_num + 1 }}.html">Next</a>
-        </li>
+        {% if page_num == page_count %}
+          <li class="page-item disabled"><a class="page-link" href="#">Следующая</a></li>
+        {% else %}
+          <li class="page-item"><a class="page-link" href="index{{ page_num + 1 }}.html">Следующая</a></li>
+        {% endif %}
       </ul>
     </nav>
     {% for book_pair in book_pairs %}

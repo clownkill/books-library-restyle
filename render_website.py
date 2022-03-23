@@ -13,6 +13,7 @@ env = Environment(
 
 def on_reload():
     template = env.get_template('template.html')
+    books_per_page = 10
 
     with open('json/books.json', 'r', encoding='utf-8') as file:
         books_json = file.read()
@@ -21,9 +22,9 @@ def on_reload():
     folder_path = 'pages/'
     os.makedirs(folder_path, exist_ok=True)
 
-    books_splite_by_20 = list(chunked(books, 10))
-    page_count = len(books_splite_by_20)
-    for page_num, splitted_books in enumerate(books_splite_by_20, 1):
+    books_splite_into_page = list(chunked(books, books_per_page))
+    page_count = len(books_splite_into_page)
+    for page_num, splitted_books in enumerate(books_splite_into_page, 1):
         book_pairs = list(chunked(splitted_books, 2))
 
         file_name = f'index{page_num}.html'
