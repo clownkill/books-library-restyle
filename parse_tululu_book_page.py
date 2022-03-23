@@ -67,6 +67,7 @@ def parse_book_page(response, book_id):
     soup = BeautifulSoup(response.text, 'lxml')
     title, author = get_book_title_author(soup)
     image_url = get_book_image_url(soup)
+    image_name = urlsplit(image_url).path.split('/')[-1]
     genres = get_book_genres(soup)
     comments = get_book_comments(soup)
     book_informations = {
@@ -74,6 +75,7 @@ def parse_book_page(response, book_id):
         'title': title,
         'author': author,
         'image_url': image_url,
+        'image_name': image_name,
         'genres': genres,
         'comments': comments,
     }

@@ -118,6 +118,7 @@ books/
 images/
 json/
 pages/
+media/
 
 .gitattributes
 *.txt

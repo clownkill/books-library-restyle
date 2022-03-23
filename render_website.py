@@ -15,7 +15,7 @@ def on_reload():
     template = env.get_template('template.html')
     books_per_page = 10
 
-    with open('json/books.json', 'r', encoding='utf-8') as file:
+    with open('media/json/books.json', 'r', encoding='utf-8') as file:
         books_json = file.read()
     books = json.loads(books_json).values()
 
