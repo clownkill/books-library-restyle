@@ -1,6 +1,7 @@
 # Парсер книг с сайта tululu.org
 Скрипт для парсинга онлайн-библиотеки  [tululu.org](https://tululu.org/).
 Позволяет скачивать книги из библиотеки. А также собирать информацию о книгах.
+![library_screen](https://user-images.githubusercontent.com/17517383/159776981-195aa651-afe3-40dd-ac20-bd989d25abb5.png)
 Отображает скачанные книги в виде офлайн-библиотеки, пример можно посмотреть на
 [GitHub Pages](https://clownkill.github.io/books-library-restyle/pages/index1.html).
 
