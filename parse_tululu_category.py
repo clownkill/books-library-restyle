@@ -7,7 +7,6 @@ import bs4
 import requests
 from bs4 import BeautifulSoup
 from requests import HTTPError
-from transliterate import get_translit_function
 
 from parse_tululu_book_page import save_book_text, download_image, parse_book_page, check_for_redirect
 
@@ -67,9 +66,7 @@ def get_book_from_pages(
                     save_response = requests.get(text_url, params=params)
                     save_response.raise_for_status()
                     book_title = parsed_book_informations['title']
-                    translit_ru = get_translit_function('ru')
-                    translit_book_title = translit_ru(book_title, reversed=True).replace(' ', '_')
-                    filename = f'{book_id}.{translit_book_title}'
+                    filename = f'{book_id}.{book_title}'
                     save_book_text(save_response, filename, dest_folder)
                     if not skip_image:
                         download_image(parsed_book_informations['image_url'], dest_folder)

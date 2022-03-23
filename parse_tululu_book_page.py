@@ -8,7 +8,7 @@ import requests
 from bs4 import BeautifulSoup
 from requests import HTTPError
 from tqdm import tqdm
-from transliterate import get_translit_function
+
 
 
 def check_for_redirect(response):
@@ -88,10 +88,6 @@ def download_book(book_id, parsed_book_informations, dest_folder='./'):
     response = requests.get(url, params)
     response.raise_for_status()
     book_title = parsed_book_informations['title']
-
-    translit_ru = get_translit_function('ru')
-    book_title = translit_ru(book_title, reversed=True).replace(' ', '_')
-
     book_image_url = parsed_book_informations['image_url']
     filename = f'{book_id}.{book_title}'
     save_book_text(response, filename, dest_folder)
