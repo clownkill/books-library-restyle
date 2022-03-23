@@ -45,8 +45,12 @@
                   <div class="card-body">
                     <h5 class="card-title">{{ book_pair[0].title }}</h5>
                     <p class="card-text">{{ book_pair[0].author }}</p>
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                    <a href="books/{{ book_pair[0].book_file_name }}" target="_blank">Читать</a>
+                    {% for genre in book_pair[0].genres %}
+                      <span class="badge badge-light">{{ genre }}</span>
+                    {% endfor %}
+                    <p>
+                      <a href="books/{{ book_pair[0].book_file_name }}" target="_blank">Читать</a>
+                    </p>
                   </div>
                 </div>
               </div>
@@ -62,8 +66,12 @@
                   <div class="card-body">
                     <h5 class="card-title">{{ book_pair[1].title }}</h5>
                     <p class="card-text">{{ book_pair[1].author }}</p>
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                    <a href="./books/{{ book_pair[1].book_file_name }}" target="_blank">Читать</a>
+                    {% for genre in book_pair[1].genres %}
+                      <span class="badge badge-light">{{ genre }}</span>
+                    {% endfor %}
+                    <p>
+                      <a href="books/{{ book_pair[1].book_file_name }}" target="_blank">Читать</a>
+                    </p>
                   </div>
                 </div>
               </div>
