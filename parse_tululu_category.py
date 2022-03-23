@@ -67,11 +67,9 @@ def get_book_from_pages(
                     save_response = requests.get(text_url, params=params)
                     save_response.raise_for_status()
                     book_title = parsed_book_informations['title']
-
                     translit_ru = get_translit_function('ru')
-                    book_title = translit_ru(book_title, reversed=True).replace(' ', '_')
-
-                    filename = f'{book_id}.{book_title}'
+                    translit_book_title = translit_ru(book_title, reversed=True).replace(' ', '_')
+                    filename = f'{book_id}.{translit_book_title}'
                     save_book_text(save_response, filename, dest_folder)
                     if not skip_image:
                         download_image(parsed_book_informations['image_url'], dest_folder)
