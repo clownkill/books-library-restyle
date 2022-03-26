@@ -57,14 +57,15 @@ def get_book_from_pages(
                     book_response = requests.get(book_url)
                     book_response.raise_for_status()
                     check_for_redirect(book_response)
-                    parsed_book_informations = parse_book_page(book_response, book_id)
-                    book_informations[book_id] = parsed_book_informations
                     text_url = 'http://tululu.org/txt.php'
                     params = {
                         'id': book_id,
                     }
                     save_response = requests.get(text_url, params=params)
                     save_response.raise_for_status()
+                    check_for_redirect(save_response)
+                    parsed_book_informations = parse_book_page(book_response, book_id)
+                    book_informations[book_id] = parsed_book_informations
                     book_title = parsed_book_informations['title']
                     filename = f'{book_id}.{book_title}'
                     save_book_text(save_response, filename, dest_folder)

@@ -10,9 +10,8 @@ from requests import HTTPError
 from tqdm import tqdm
 
 
-
 def check_for_redirect(response):
-    if len(response.history) > 1:
+    if len(response.history) != 1:
         raise HTTPError
 
 
