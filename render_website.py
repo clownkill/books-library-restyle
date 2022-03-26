@@ -21,9 +21,9 @@ def on_reload():
     folder_path = 'pages/'
     os.makedirs(folder_path, exist_ok=True)
 
-    books_splite_into_page = list(chunked(books, books_per_page))
-    page_count = len(books_splite_into_page)
-    for page_num, splitted_books in enumerate(books_splite_into_page, 1):
+    books_split_into_page = list(chunked(books, books_per_page))
+    page_count = len(books_split_into_page)
+    for page_num, splitted_books in enumerate(books_split_into_page, 1):
         book_pairs = list(chunked(splitted_books, 2))
 
         file_name = f'index{page_num}.html'
