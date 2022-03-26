@@ -16,8 +16,7 @@ def on_reload():
     books_per_page = 10
 
     with open('media/json/books.json', 'r', encoding='utf-8') as file:
-        books_json = file.read()
-    books = json.loads(books_json).values()
+        books = json.load(file).values()
 
     folder_path = 'pages/'
     os.makedirs(folder_path, exist_ok=True)
