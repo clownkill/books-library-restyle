@@ -50,7 +50,7 @@
                       <span class="badge badge-light">{{ genre }}</span>
                     {% endfor %}
                     <p>
-                      <a href="../media/books/{{ book_pair[0].book_file_name }}" target="_blank">Читать</a>
+                      <a href="../media/books/{{ book_pair[0].book_file_name | urlencode }}" target="_blank">Читать</a>
                     </p>
                   </div>
                 </div>
@@ -71,7 +71,7 @@
                       <span class="badge badge-light">{{ genre }}</span>
                     {% endfor %}
                     <p>
-                      <a href="../media/books/{{ book_pair[-1].book_file_name }}" target="_blank">Читать</a>
+                      <a href="../media/books/{{ book_pair[-1].book_file_name | urlencode }}" target="_blank">Читать</a>
                     </p>
                   </div>
                 </div>
